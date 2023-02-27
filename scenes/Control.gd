@@ -1,6 +1,7 @@
 extends Control
 
 var mouse_over = false
+var mesh_selection = false
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"

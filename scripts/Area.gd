@@ -52,3 +52,15 @@ func compute_b2m():
 func compute_b2g():
 	var vector = get_node("CollisionShape").shape.extents
 	b2g = pow(PI/vector.x,2) + pow(PI/vector.y,2) + pow(PI/vector.z,2)
+
+
+func _on_Area_mouse_entered():
+	if get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/GUI_VBoxContainer/moving_volume_check_button").pressed:
+		get_node("MFR").get_surface_material(0).set_albedo(Color8(34,152,118,255))
+	
+
+
+func _on_Area_mouse_exited():
+	if get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/GUI_VBoxContainer/moving_volume_check_button").pressed:
+		get_node("MFR").get_surface_material(0).set_albedo(Color8(34,152,118,109))
+	pass # Replace with function body.

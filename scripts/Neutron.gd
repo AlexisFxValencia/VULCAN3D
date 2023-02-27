@@ -44,23 +44,25 @@ func _ready():
 func rebound_on_walls():
 	if (transform.origin.x > limits):
 		velocity.x = - abs(velocity.x)
-	if (transform.origin.x < - limits):
+	elif (transform.origin.x < - limits):
 		velocity.x = abs(velocity.x)
+	
 	if (transform.origin.y > 2*limits):
 		velocity.y = - abs(velocity.y)
-	if (transform.origin.y < 0):
+	elif (transform.origin.y < 0):
 		velocity.y = abs(velocity.y)
+	
 	if (transform.origin.z > limits):
 		velocity.z = - abs(velocity.z)
-	if (transform.origin.z < -limits):
+	elif (transform.origin.z < -limits):
 		velocity.z = abs(velocity.z)
 
-func delete_neutron():
+func delete_fled_neutron():
 	if (abs(transform.origin.x) > limits):
 		get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/minimal_VBoxContainer/nb_neutrons_label").update_nb_neutrons()
 		get_parent().nb_neutrons -= 1
 		queue_free()
-	elif (abs(transform.origin.y) > limits):
+	elif transform.origin.y > 2*limits or transform.origin.y < 0 :
 		get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/minimal_VBoxContainer/nb_neutrons_label").update_nb_neutrons()
 		get_parent().nb_neutrons -= 1
 		queue_free()
@@ -98,9 +100,9 @@ func fission():
 	
 	get_parent().child_location = transform.origin
 	for i in nb_generated_neutrons:
-		get_parent().nb_neutrons += 1
-		get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/minimal_VBoxContainer/nb_neutrons_label").update_nb_neutrons()
 		get_parent().add_neutron()
+		get_tree().get_current_scene().get_node("Control/Panel/VBoxContainer/minimal_VBoxContainer/nb_neutrons_label").update_nb_neutrons()
+		
 		
 		
 	
@@ -108,15 +110,15 @@ func compute_one_reaction():
 	var alea = randf()
 	#print("alea : ", alea)
 	if (alea < proba_s):
-		#print("reaction : scatter")
+		print("reaction : scatter")
 		scatter()  
 	elif (proba_s < alea && alea < proba_s + proba_c):
-		#print("reaction : capture")
+		print("reaction : capture")
 		get_parent().nb_neutrons -= 1
 		queue_free()
 		#capture();    
 	elif(proba_s + proba_c < alea && alea < 1.0):
-		#print("reaction : fission")
+		print("reaction : fission")
 		#print("new neutron")
 		fission()
 		
@@ -136,7 +138,7 @@ func _process(delta):
 		if get_parent().reflexions_activated:
 			rebound_on_walls()
 		else:
-			delete_neutron()
+			delete_fled_neutron()
 		#move_and_slide(velocity)
 		move_and_collide(velocity*delta)
 
